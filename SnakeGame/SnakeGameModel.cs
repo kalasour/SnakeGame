@@ -95,7 +95,7 @@ namespace SnakeGame
             
          // random the first body sequence, set the head location on the bottom part of the screen
             curHeadY = rand.Next(h/2) + 1;
-            curHeadX = rand.Next(w - 1) + 1;
+            curHeadX = rand.Next(w - 2) + 1;
             for (int i = 0; i != SNAKE_INIT_SIZE; i++)
             {
                 curHeadY++;
@@ -120,8 +120,8 @@ namespace SnakeGame
             int x, y;
             do
             {
-                x = rand.Next(boardWidth);
-                y = rand.Next(boardHeight);
+                x = rand.Next(1,boardWidth-1);
+                y = rand.Next(1,boardHeight-1);
             } while (isSnakeBody(x, y));
             _board[x, y] = BOARD_FOOD;
         }
@@ -140,6 +140,8 @@ namespace SnakeGame
 
         public void SetDirection(int d)
         {
+            if(d-direction==2|| d - direction == -2)
+            { return; }
             direction = d;
         }
 
@@ -161,6 +163,7 @@ namespace SnakeGame
             {
                 curHeadX++;
             }
+            
 
             // hit myself?
             if (isSnakeBody(curHeadX, curHeadY))

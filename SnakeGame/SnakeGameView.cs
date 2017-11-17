@@ -18,7 +18,7 @@ namespace SnakeGame
         Texture2D snakeTile = null;
         Texture2D foodTile = null;
         Texture2D wallTile = null;
-        private const int TILE_SIZE = 5;
+        private const int TILE_SIZE = 10;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SnakeGameModel sbm = null;
@@ -70,7 +70,7 @@ namespace SnakeGame
         {
             base.Initialize();
         }
-
+        
         protected override void UnloadContent()
         {
             base.UnloadContent();
@@ -126,7 +126,6 @@ namespace SnakeGame
             if (m is SnakeGameModel)
             {
                 sbm = (SnakeGameModel)m;
-
                 if (sbm.isHit)
                 {
                     controller.Stop();

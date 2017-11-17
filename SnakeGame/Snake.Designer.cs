@@ -74,6 +74,7 @@
             this.chbDebug.TabIndex = 3;
             this.chbDebug.Text = "Debug";
             this.chbDebug.UseVisualStyleBackColor = true;
+            this.chbDebug.CheckedChanged += new System.EventHandler(this.chbDebug_CheckedChanged);
             // 
             // Snake
             // 

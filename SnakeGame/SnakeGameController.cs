@@ -8,39 +8,63 @@ using System.Timers;
 
 namespace SnakeGame
 {
+
     public class SnakeGameController : Controller
     {
         Timer timer;
+        Timer pause;
+        private bool canPress = true;
 
         public SnakeGameController()
         {
             // update the board every one second;
-            timer = new Timer(SnakeGameModel.TIME_BASE / SnakeGameModel.Speed);
-            timer.Enabled = false;
-            timer.Elapsed += this.OnTimedEvent;
+            Timer = new Timer(SnakeGameModel.TIME_BASE / SnakeGameModel.Speed);
+            Timer.Enabled = false;
+            Timer.Elapsed += this.OnTimedEvent;
+            pause = new Timer(500);
+            pause.Enabled = false;
+            pause.Elapsed += OnTimedEvent2;
         }
 
+        public Timer Timer { get => timer; set => timer = value; }
 
         public void KeyUpHandled(KeyboardState ks)
         {
             int direction = -1;
             Keys[] keys = ks.GetPressedKeys();
-           
+
             if (keys.Contains(Keys.Up))
             {
                 direction = SnakeGameModel.MOVE_UP;
             }
-            else if(keys.Contains(Keys.Down))
+            else if (keys.Contains(Keys.Down))
             {
                 direction = SnakeGameModel.MOVE_DOWN;
             }
-            else if(keys.Contains(Keys.Left))
+            else if (keys.Contains(Keys.Left))
             {
                 direction = SnakeGameModel.MOVE_LEFT;
             }
-            else if(keys.Contains(Keys.Right))
+            else if (keys.Contains(Keys.Right))
             {
                 direction = SnakeGameModel.MOVE_RIGHT;
+            }
+            else if (keys.Contains(Keys.Space))
+            {
+
+                if (canPress&&timer.Enabled)
+                {
+                    Stop();
+                    pause.Enabled = true;
+                    canPress = false;
+                }
+                else if(canPress && !timer.Enabled)
+                {
+                    Start();
+                    canPress = false;
+                    pause.Enabled = true;
+                }
+
             }
             // Find all snakeboard model we know
             if (direction == -1) return;
@@ -59,13 +83,14 @@ namespace SnakeGame
 
         public void Start()
         {
-            timer.Enabled = true; 
+            Timer.Enabled = true;
         }
+
 
         public void Stop()
         {
             // Stop the game
-            timer.Enabled = false;
+            Timer.Enabled = false;
         }
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
@@ -80,7 +105,13 @@ namespace SnakeGame
                     sbm.Update();
                 }
             }
-            timer.Interval = SnakeGameModel.TIME_BASE / SnakeGameModel.Speed;
+            Timer.Interval = SnakeGameModel.TIME_BASE / SnakeGameModel.Speed;
+        }
+        private void OnTimedEvent2(Object source, ElapsedEventArgs e)
+        {
+            Snake.Debug("Can switch!");
+            canPress = true;
+            pause.Enabled = false;
         }
 
     }
